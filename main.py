@@ -3,13 +3,14 @@ from tkinter import messagebox, Listbox, END
 
 class TemperatureConverter:
     def __init__(self):
-        ctk.set_appearance_mode("light")  
-        ctk.set_default_color_theme("dark-blue")  
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("dark-blue")
 
         self.window = ctk.CTk()
         self.window.title("Temperature Converter")
-        self.window.geometry("400x550")
+        self.window.geometry("450x550")
         self.window.resizable(False, False)
+        self.window.configure(bg="yellow")  # Set the background color to yellow
 
         self.create_widgets()
         self.history = []
@@ -28,6 +29,10 @@ class TemperatureConverter:
 
         label_temp = ctk.CTkLabel(frame, text="Temperature:")
         label_temp.grid(row=0, column=0, padx=5)
+
+        #tombol clear temperatur
+        clear_temp_button = ctk.CTkButton(frame, text="Clear", command=self.clear_temperature)
+        clear_temp_button.grid(row=0, column=2, padx=5)
 
         #drop down satuan suhu 
         self.units = ['Celsius', 'Fahrenheit', 'Kelvin']
@@ -116,12 +121,16 @@ class TemperatureConverter:
             self.label_result.configure(text=f"Result: {result:.2f} {to_unit}")
             self.add_to_history(temp, from_unit, result, to_unit)
         except ValueError as e:
+           messagebox.showerror("Invalid input", str(e))
            self.label_result.configure(text="Error: Invalid input")
 
     def add_to_history(self, original_temp, from_unit, converted_temp, to_unit):
          history_entry = f"{original_temp:.2f} {from_unit} -> {converted_temp:.2f} {to_unit}"
          self.history.append(history_entry)
          self.history_listbox.insert(END, history_entry)
+    
+    def clear_temperature(self):
+        self.entry_temp.delete(0, END)
 
 
     def clear_history(self):
@@ -134,3 +143,4 @@ class TemperatureConverter:
 if __name__ == "__main__":
     app = TemperatureConverter()
     app.run()
+    
